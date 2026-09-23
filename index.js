@@ -52,6 +52,21 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.get('/posts', async (req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT posts.id, posts.title, posts.content, posts.created_at, users.username AS author
+       FROM posts JOIN users ON posts.user_id = users.id
+       ORDER BY posts.created_at DESC`
+        );
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+});
+
+
 
 
 
